@@ -1,3 +1,4 @@
+import traceback
 import uuid
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -34,6 +35,8 @@ def get_new_round():
         GAME_SESSIONS[game_id] = puzzle["solution"]
         return {"game_id": game_id, "tiles": puzzle["tiles"]}
     except Exception as e:
+        print("\n❌ BACKEND ERROR IN /api/puzzle/new:")
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/puzzle/validate")

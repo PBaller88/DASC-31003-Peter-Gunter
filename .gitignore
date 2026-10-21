@@ -1,3 +1,18 @@
-venv/
-__pycache__/
+# OS and Editor junk
 .DS_Store
+.vscode/
+__pycache__/
+*.pyc
+
+# Application artifacts
+app.zip
+
+# Terraform files to ignore
+*.tfstate
+*.tfstate.*
+*.tfplan
+.terraform/
+terraform.tfstate.d/
+
+# Track Terraform provider lock file
+!.terraform.lock.hcl

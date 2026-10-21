@@ -1,3 +1,4 @@
+import os
 import traceback
 import uuid
 from fastapi import FastAPI, HTTPException
@@ -6,6 +7,8 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import List
 from generator import generate_puzzle_round
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = FastAPI(title="GeoConnections API")
 
@@ -25,7 +28,10 @@ class GuessRequest(BaseModel):
 
 @app.get("/")
 def read_index():
-    return FileResponse("index.html")
+    index_path = os.path.join(BASE_DIR, "index.html")
+    if not os.path.exists(index_path):
+        raise HTTPException(status_code=404, detail="index.html not found.")
+    return FileResponse(index_path)
 
 @app.get("/api/puzzle/new")
 def get_new_round():
@@ -60,7 +66,3 @@ def validate_guess(payload: GuessRequest):
             }
 
     return {"correct": False, "message": "Not a match! Try again."}
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True)
